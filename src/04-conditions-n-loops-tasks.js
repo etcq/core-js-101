@@ -274,8 +274,29 @@ function reverseInteger(num) {
  *   5436468789016589 => false
  *   4916123456789012 => false
  */
-function isCreditCardNumber(/* ccn */) {
-  throw new Error('Not implemented');
+function isCreditCardNumber(ccn) {
+  let filteredArr = [];
+  let secondArr = [];
+  const ccnArr = ccn.toString().split('');
+  if (ccn.toString().length % 2 === 0) {
+    filteredArr = ccnArr.filter((value, index) => index % 2 === 0);
+    secondArr = ccnArr.filter((value, index) => index % 2 !== 0);
+  } else {
+    filteredArr = ccnArr.filter((value, index) => index % 2 !== 0);
+    secondArr = ccnArr.filter((value, index) => index % 2 === 0);
+  }
+
+  let result = filteredArr.map((item) => {
+    if (+item * 2 > 9) {
+      return +item * 2 - 9;
+    }
+    return +item * 2;
+  }).reduce((a, b) => a + b, 0);
+  result += secondArr.reduce((a, b) => +a + +b, 0);
+  if (result % 10 === 0) {
+    return true;
+  }
+  return false;
 }
 
 /**
@@ -323,8 +344,26 @@ function getDigitalRoot(num) {
  *   '{)' = false
  *   '{[(<{[]}>)]}' = true
  */
-function isBracketsBalanced(/* str */) {
-  throw new Error('Not implemented');
+function isBracketsBalanced(str) {
+  const config = ['()', '[]', '{}', '<>'];
+  const stack = [];
+  for (let i = 0; i < str.length; i += 1) {
+    let checking = true;
+    const curr = str[i];
+    config.forEach((element) => {
+      if (curr === element[0]) {
+        stack.push(curr);
+      } else if (curr === element[1]) {
+        if (element[0] !== stack.pop()) {
+          checking = false;
+        }
+      }
+    });
+    if (checking === false) {
+      return false;
+    }
+  }
+  return stack.length === 0;
 }
 
 
